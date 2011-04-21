@@ -20,6 +20,7 @@ var app = Sammy('#main', function() {
           }
        });
     });
+    this.bind('changed', resolveEmbeds);
     this.bind('getFeed', function() {
         oauth2.retrieveAccessToken();
         if (! oauth2.authParameters || ! oauth2.authParameters['access_token']) {
