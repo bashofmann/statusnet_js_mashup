@@ -25,7 +25,7 @@ var app = Sammy('#main', function() {
         $.ajax({
             url: 'http://localhost:8062/statusnet_js_client/backend/oembed.json',
             success: function(result) {
-                that.widget = result.html;
+                that.widget = html_sanitize(result.html);
                 that.partial('js/templates/widget.ms');
             }
        });
