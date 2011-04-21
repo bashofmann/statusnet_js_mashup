@@ -20,6 +20,16 @@ var app = Sammy('#main', function() {
           }
        });
     });
+    this.get('#Widget', function() {
+        var that = this;
+        $.ajax({
+            url: 'http://localhost:8062/statusnet_js_client/backend/oembed.json',
+            success: function(result) {
+                that.widget = result.html;
+                that.partial('js/templates/widget.ms');
+            }
+       });
+    });
     this.bind('changed', resolveEmbeds);
     this.bind('getFeed', function() {
         oauth2.retrieveAccessToken();
