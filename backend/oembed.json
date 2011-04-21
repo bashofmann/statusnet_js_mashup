@@ -3,5 +3,5 @@
 	"type": "rich",
 	"width": 425,
 	"height": 344,
-	"html": "<b>foo</b>"
+	"html": "<b>foo</b><script>alert(1);</script>"
 }
