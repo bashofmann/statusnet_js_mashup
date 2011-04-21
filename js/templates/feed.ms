@@ -6,7 +6,7 @@
 <ul>
 {{#feed}}
   <li>
-      <p>{{text}}</p>
+      <p>{{{statusnet_html}}}</p>
       <p>{{created_at}} 
           {{#user}}
           {{name}}
