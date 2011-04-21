@@ -15,3 +15,5 @@
   </li>
 {{/feed}}
 </ul>
+
+<a href="#Widget">Widget</a>
