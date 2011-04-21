@@ -1,11 +1,24 @@
 var app = Sammy('#main', function() {
     this.use(Sammy.Mustache, 'ms');
-    this.get('', function() {
+    this.get('#/', function() {
         this.trigger('getFeed');
     });
     this.get('#Login', function() {
        var consumerKey = '2e70313dfb8a673a1ad84f441595b38e';
        window.open('http://status.net.xyz:8061/index.php/api/oauth2/authorize?response_toke=token&client_id=' + consumerKey);
+    });
+    this.post('#Post', function() {
+       var that = this;
+       $.ajax({
+          url: 'http://status.net.xyz:8061/index.php/api/statuses/update.json?oauth_token=' + oauth2.authParameters['access_token'],
+          type: 'POST',
+          data: {
+            'status': that.params['post']
+          },
+          success: function() {
+              that.redirect('#/');
+          }
+       });
     });
     this.bind('getFeed', function() {
         oauth2.retrieveAccessToken();
@@ -25,7 +38,7 @@ var app = Sammy('#main', function() {
 });
 
 jQuery(function() {
-    app.run();
+    app.run('#/');
 });
 
 var oauth2 = {
