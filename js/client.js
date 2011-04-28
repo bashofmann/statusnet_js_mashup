@@ -31,7 +31,13 @@ var app = Sammy('#main', function() {
             }
        });
     });
-    this.bind('changed', resolveEmbeds);
+    this.bind('changed', function() {
+        if ($('#gadget-chrome-0').length > 0) {
+            container.init();
+            container.renderGadgets();
+        }
+        resolveEmbeds();
+    });
     this.bind('getFeed', function() {
         oauth2.retrieveAccessToken();
         if (! oauth2.authParameters || ! oauth2.authParameters['access_token']) {
@@ -78,8 +84,8 @@ var app = Sammy('#main', function() {
             console.log('connected');
             that.trigger('subscribe');
         });
-        socket.on('disconnect', function(){console.log('disconnected'); });
-        socket.on('reconnect', function(){ console.log('reconnected'); });
+        socket.on('disconnect', function(){console.log('disconnected');});
+        socket.on('reconnect', function(){console.log('reconnected');});
     });
     this.bind('subscribe', function() {
        console.log('subscribe to feed');
@@ -123,3 +129,38 @@ var oauth2 = {
         oauth2.authParameters['access_token'] = localStorage.getItem("access_token");
     }
 }
+
+
+
+var container = {};
+
+container.gadgetSpecUrls = [
+  'http://localhost:8062/statusnet_js_client/gadgets/hello_world.xml'
+];
+
+container.LayoutManager = function() {
+  shindig.LayoutManager.call(this);
+};
+
+container.LayoutManager.inherits(shindig.LayoutManager);
+
+container.LayoutManager.prototype.getGadgetChrome = function(gadget) {
+  var chromeId = 'gadget-chrome-' + gadget.id;
+  return chromeId ? document.getElementById(chromeId) : null;
+};
+
+container.init = function() {
+  shindig.container.layoutManager = new container.LayoutManager();
+};
+
+container.renderGadgets = function() {
+  shindig.container.setParentUrl("http://" + window.location.host + "/");
+  for (var i = 0; i < container.gadgetSpecUrls.length; ++i) {
+    var gadget = shindig.container.createGadget(
+        {debug:1,specUrl: container.gadgetSpecUrls[i], title: "Gadget"});
+    gadget.setServerBase('http://localhost:8080/gadgets/');
+    shindig.container.addGadget(gadget);
+    shindig.container.renderGadget(gadget);
+
+  }
+};
