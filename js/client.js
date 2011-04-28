@@ -135,7 +135,9 @@ var oauth2 = {
 var container = {};
 
 container.gadgetSpecUrls = [
-  'http://localhost:8062/statusnet_js_client/gadgets/hello_world.xml'
+  'http://localhost:8062/statusnet_js_client/gadgets/hello_world.xml',
+  'http://localhost:8062/statusnet_js_client/gadgets/sample-pubsub-publisher.xml',
+  'http://localhost:8062/statusnet_js_client/gadgets/sample-pubsub-subscriber.xml'
 ];
 
 container.LayoutManager = function() {
@@ -150,6 +152,27 @@ container.LayoutManager.prototype.getGadgetChrome = function(gadget) {
 };
 
 container.init = function() {
+  gadgets.pubsubrouter.init(function(id) {
+    var gadgetId = shindig.container.gadgetService.getGadgetIdFromModuleId(id);
+    var gadget = shindig.container.getGadget(gadgetId);
+    return gadget.specUrl;
+  }, {
+    onSubscribe: function(sender, channel) {
+      console.log(sender + " subscribes to channel '" + channel + "'");
+      // return true to reject the request.
+      return false;
+    },
+    onUnsubscribe: function(sender, channel) {
+      console.log(sender + " unsubscribes from channel '" + channel + "'");
+      // return true to reject the request.
+      return false;
+    },
+    onPublish: function(sender, channel, message) {
+      console.log(sender + " publishes '" + message + "' to channel '" + channel + "'");
+      // return true to reject the request.
+      return false;
+    }
+  });
   shindig.container.layoutManager = new container.LayoutManager();
 };
 
