@@ -69,6 +69,7 @@ var app = Sammy('#main', function() {
                       'name': xmlDoc.find('author').find('poco\\:displayName').text()
                   }
                }].concat(feed);
+               window.webkitNotifications.createNotification(null, 'New message', $(this).find('content').text()).show();
                that.trigger('renderFeed');
             });
         });

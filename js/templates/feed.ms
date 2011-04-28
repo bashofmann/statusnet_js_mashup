@@ -16,4 +16,5 @@
 {{/feed}}
 </ul>
 
+<a href="javascript:window.webkitNotifications.requestPermission();">notification</a>
 <a href="#Widget">Widget</a>
