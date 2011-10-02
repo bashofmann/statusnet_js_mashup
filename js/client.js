@@ -21,6 +21,17 @@ var app = Sammy('#main', function() {
           }
        });
     });
+    this.post('#Share', function() {
+	    var that = this;
+	console.log('http://127.0.0.1:8000?share.hostname=' + encodeURIComponent(this.params['hostname']) + '&url=' + encodeURIComponent(window.location));
+		$.ajax({
+			url: 'http://127.0.0.1:8000?share.hostname=' + encodeURIComponent(this.params['hostname']) + '&url=' + encodeURIComponent(window.location),
+			success: function(response) {
+				window.open(response);
+				that.redirect('#/');
+			}
+		});
+	});
     this.get('#Widget', function() {
         var that = this;
         $.ajax({

@@ -4,6 +4,7 @@ var sys = require('sys'),
    qs   = require('querystring'),
    io   = require('socket.io'),
    http = require('http'),
+   oexchange = require('oexchange'),
    server,
    ioServer,
    ioSendFunction;
@@ -36,8 +37,19 @@ server = http.createServer(function (req, res) {
             sys.puts(params['hub.mode']);
             sys.puts('got challenge' + params['hub.challenge']);
             res.write(params['hub.challenge']);
-        }
-        res.end();
+        	res.end();
+        } else if (typeof(params['share.hostname']) != "undefined" && typeof(params['url']) != "undefined") {
+			oexchange.getSharingUrl(params['share.hostname'], params, function(result) {
+				console.log(result);
+				if (result) {
+					res.write(result);
+				}
+				res.end();
+			});
+		} else {
+           res.end();
+		}
+
     }
 });
 

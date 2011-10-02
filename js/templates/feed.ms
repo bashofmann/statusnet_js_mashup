@@ -3,6 +3,12 @@
     <input type="submit" value="abschicken"/>
 </form>
 
+<form action="#Share" method="post">
+    <label for="hostname">Hostname:</label>
+    <input type="text" name="hostname" value="www.researchgate.net" />
+    <input type="submit" value="share"/>
+</form>
+
 <ul>
 {{#feed}}
   <li>
